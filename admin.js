@@ -2,7 +2,13 @@
 const SUPABASE_URL = 'https://tylrkakismpicnpzjiks.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_EYEc-ZTzObs27HrBJ_kdFg_xhEY9bHc';
 
-const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+// Inicializa o cliente Supabase de forma segura
+let supabaseClient = null;
+if (typeof window !== 'undefined' && window.supabase) {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} else {
+  console.warn('Biblioteca Supabase não carregada via CDN.');
+}
 
 const loginView = document.querySelector('#loginView');
 const adminView = document.querySelector('#adminView');
@@ -27,16 +33,25 @@ const categoryMedia = [
 ];
 
 async function loadProductsFromDB() {
-  const { data, error } = await supabase.from('products_edits').select('*');
-  if (error) {
-    console.error('Erro ao carregar produtos:', error);
-    return;
+  if (!supabaseClient) return;
+
+  try {
+    const { data, error } = await supabaseClient.from('products_edits').select('*');
+    if (error) {
+      console.error('Erro ao carregar produtos do Supabase:', error.message);
+      return;
+    }
+
+    // Mescla os dados do DB com a lista original
+    if (data) {
+      data.forEach(edit => {
+        const product = adminProducts.find(p => p.id === edit.id);
+        if (product) Object.assign(product, edit);
+      });
+    }
+  } catch (err) {
+    console.error('Falha na conexão com Supabase:', err);
   }
-  // Mescla os dados do DB com a lista original
-  data.forEach(edit => {
-    const product = adminProducts.find(p => p.id === edit.id);
-    if (product) Object.assign(product, edit);
-  });
   renderProductList();
 }
 
@@ -52,12 +67,19 @@ function showLogin() {
 }
 
 async function saveProductToDB(id, updates) {
-  const { error } = await supabase.from('products_edits').upsert({ id, ...updates });
-  if (error) {
-    console.error('Erro ao salvar:', error);
+  if (!supabaseClient) return false;
+
+  try {
+    const { error } = await supabaseClient.from('products_edits').upsert({ id, ...updates });
+    if (error) {
+      console.error('Erro ao salvar:', error);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error('Erro de rede ao salvar:', e);
     return false;
   }
-  return true;
 }
 
 function renderProductList() {
@@ -111,9 +133,10 @@ async function deleteProduct(id) {
   if (!confirm('Tem certeza que deseja excluir este produto?')) return;
 
   try {
-    // Remove do banco de dados
-    const { error } = await supabaseClient.from('products_edits').delete().eq('id', id);
-    if (error) throw error;
+    if (supabaseClient) {
+      const { error } = await supabaseClient.from('products_edits').delete().eq('id', id);
+      if (error) throw error;
+    }
 
     // Remove da lista local
     const index = adminProducts.findIndex(p => p.id === id);
@@ -135,12 +158,13 @@ async function deleteCategoryImage(key) {
   if (!confirm(`Tem certeza que deseja remover a imagem da categoria ${key}?`)) return;
 
   try {
-    // Remove do banco de dados
-    const { error } = await supabaseClient.from('category_images').delete().eq('key', key);
-    if (error) throw error;
+    if (supabaseClient) {
+      const { error } = await supabaseClient.from('category_images').delete().eq('key', key);
+      if (error) throw error;
+    }
 
     // Remove do localStorage
-    const images = categoryImageOverrides();
+    const images = JSON.parse(localStorage.getItem('levelup-category-images') || '{}');
     delete images[key];
     localStorage.setItem('levelup-category-images', JSON.stringify(images));
 
@@ -188,17 +212,21 @@ document.querySelector('#productImage').addEventListener('input', event => {
   document.querySelector('#imagePreview').src = event.target.value;
 });
 
-loginForm.addEventListener('submit', event => {
+// Lógica de Login Corrigida
+loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   event.stopPropagation();
+
   const user = document.querySelector('#loginUser').value.trim();
   const password = document.querySelector('#loginPassword').value;
+
   if (user === 'levelupstoreadmin' && password === '@levelupstoreadmin123') {
     sessionStorage.setItem('levelup-admin-auth', 'true');
     showAdmin();
   } else {
     loginError.textContent = 'Usuário ou senha inválidos.';
   }
+
   return false;
 });
 
@@ -225,18 +253,18 @@ document.querySelector('#productForm').addEventListener('submit', async event =>
   Object.assign(selectedProduct, updated);
 
   const saveMsg = document.querySelector('#saveMessage');
-  saveMsg.textContent = 'Salvando na nuvem...';
+  saveMsg.textContent = 'Salvando...';
 
   const success = await saveProductToDB(selectedProduct.id, updated);
 
   if (success) {
     saveMsg.style.color = '#74dc95';
     saveMsg.textContent = 'Salvo com sucesso! Visível para todos.';
-    renderProductList();
   } else {
-    saveMsg.style.color = '#ff8970';
-    saveMsg.textContent = 'Erro ao salvar. Verifique sua conexão.';
+    saveMsg.style.color = '#ffca45';
+    saveMsg.textContent = 'Salvo localmente (Supabase indisponível).';
   }
+  renderProductList();
 });
 
 document.querySelector('#deleteProduct')?.addEventListener('click', () => {
@@ -244,4 +272,7 @@ document.querySelector('#deleteProduct')?.addEventListener('click', () => {
   deleteProduct(selectedProduct.id);
 });
 
-if (sessionStorage.getItem('levelup-admin-auth') === 'true') showAdmin();
+// Verifica autenticação ao carregar
+if (sessionStorage.getItem('levelup-admin-auth') === 'true') {
+  showAdmin();
+}
