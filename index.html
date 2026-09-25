@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="LevelUpStore: PCs gamer, hardware e periféricos para jogar no seu máximo." />
+    <meta property="og:title" content="LevelUpStore | Seu próximo nível começa aqui" />
+    <meta property="og:description" content="PCs Gamer montados, testados e prontos para transformar cada partida em uma experiência inesquecível." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=88" />
+    <meta property="og:type" content="website" />
+    <title>LevelUpStore | Seu próximo nível começa aqui</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .brand-name{display:inline-flex;align-items:baseline;gap:.24em;font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:700;letter-spacing:.01em;line-height:1;color:#f4f6f7}.brand-name strong{font-weight:700;color:#f4f6f7}.brand-name b{color:var(--orange);font-weight:700;position:relative}.brand-name b::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:2px;background:var(--orange);opacity:.85}.admin-shortcut{color:#64717c!important;font-size:13px!important;opacity:.55;margin-left:auto}.admin-shortcut:hover{color:var(--orange)!important;opacity:1}.guide-reader{position:fixed;inset:0;z-index:40;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .25s}.guide-reader.open{pointer-events:auto;opacity:1}.guide-reader-backdrop{position:absolute;inset:0;background:#05080dcc}.guide-reader article{position:relative;width:min(680px,calc(100% - 32px));max-height:80vh;overflow:auto;background:#111c28;border:1px solid #354756;padding:42px;transform:translateY(18px);transition:transform .25s}.guide-reader.open article{transform:translateY(0)}.guide-reader h2{font-family:'Barlow Condensed';font-size:clamp(2.5rem,6vw,4.5rem);line-height:.88;text-transform:uppercase;margin:0 0 25px}.guide-reader h2::first-letter{color:var(--orange)}.guide-reader p{color:#aebbc5;font-size:14px;line-height:1.8}.guide-reader-close{position:absolute;right:18px;top:12px;background:transparent;border:0;color:#fff;font-size:30px}@media(max-width:420px){.brand-name{font-size:28px}.guide-reader article{padding:32px 22px}}
+      .cart-button{font-size:24px;line-height:1}.cart-button:hover{color:var(--orange)}.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    </style>
+  </head>
+  <body>
+    <div class="topbar"><div class="container topbar-inner"><span>Frete grátis acima de R$ 699</span><strong>10% OFF no Pix</strong><span>Compra segura e suporte especializado</span></div></div>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <button class="menu-toggle" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="#top" aria-label="LevelUpStore início"><span class="brand-name"><strong>LevelUp</strong> <b>Store</b></span></a>
+        <nav class="main-nav" aria-label="Navegação principal">
+          <a href="#pcs" data-nav-filter="pc">PC Gamer</a>
+          <a href="#pcs" data-nav-filter="apple">Apple</a>
+          <a href="#pcs" data-nav-filter="samsung">Samsung</a>
+          <a href="#pcs" data-nav-filter="xbox">Xbox</a>
+          <a href="#pcs" data-nav-filter="playstation">PlayStation</a>
+          <a href="#pcs" data-nav-filter="jbl">JBL</a>
+          <a href="#pcs" data-nav-filter="xiaomi">Xiaomi</a>
+          <a href="#pcs" data-nav-filter="razer">Razer</a>
+          <a href="#pcs" data-nav-filter="chair">Cadeiras</a>
+        </nav>
+        <div class="header-actions">
+          <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="O que você procura?" /></label>
+          <button class="cart-button" id="cartButton" aria-label="Abrir carrinho"><span aria-hidden="true">🛒</span><b id="cartCount" class="visually-hidden">0</b></button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-grid container">
+          <div class="hero-copy">
+            <p class="kicker">A performance que você sente</p>
+            <h1>JOGUE NO<br /><em>SEU MÁXIMO.</em></h1>
+            <p class="hero-description">PCs Gamer montados, testados e prontos para transformar cada partida em uma experiência inesquecível.</p>
+            <div class="hero-actions"><a class="button button-primary" href="#pcs">Explorar PCs <span>↗</span></a><a class="button button-ghost" href="#categorias">Montar meu setup</a></div>
+            <div class="hero-stats"><div><strong>+10 mil</strong><span>setups entregues</span></div><div><strong>3 anos</strong><span>de garantia</span></div><div><strong>4.9/5</strong><span>avaliação média</span></div></div>
+          </div>
+          <div class="hero-art"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-glow"></div><img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=88" alt="Setup gamer com computador, monitor e periféricos" fetchpriority="high" width="1000" height="750" /><div class="hero-tag"><span>PC · MONITOR · PERIFÉRICOS</span><strong>LEVELUP // 07</strong></div></div>
+        </div>
+        <div class="hero-ticker"><div class="ticker-track"><span>PC GAMER</span><i>✦</i><span>PERFORMANCE</span><i>✦</i><span>HARDWARE</span><i>✦</i><span>SEU PRÓXIMO NÍVEL</span><i>✦</i><span>PC GAMER</span><i>✦</i><span>PERFORMANCE</span><i>✦</i></div></div>
+      </section>
+
+      <section class="categories container" id="categorias"><div class="section-heading"><div><p class="kicker">Navegue pelo catálogo</p><h2>Escolha sua <em>categoria.</em></h2></div><a class="text-link" href="#pcs">Ver todos <span>→</span></a></div><div class="category-grid category-grid-brands"><a class="category-card category-pc" href="#pcs" data-filter-link="pc"><span class="category-number">01</span><div><small>SETUPS COMPLETOS</small><h3>PC Gamer</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-gpu" href="#pcs" data-filter-link="apple"><span class="category-number">02</span><div><small>IPHONE · MAC · WATCH</small><h3>Apple</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-peripherals" href="#pcs" data-filter-link="samsung"><span class="category-number">03</span><div><small>GALAXY · MONITORES</small><h3>Samsung</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-chair" href="#pcs" data-filter-link="xbox"><span class="category-number">04</span><div><small>CONSOLES · ACESSÓRIOS</small><h3>Xbox</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-pc" href="#pcs" data-filter-link="playstation"><span class="category-number">05</span><div><small>CONSOLES · NOVA GERAÇÃO</small><h3>PlayStation</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-gpu" href="#pcs" data-filter-link="jbl"><span class="category-number">06</span><div><small>SOM PARA TODO LUGAR</small><h3>JBL</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-peripherals" href="#pcs" data-filter-link="xiaomi"><span class="category-number">07</span><div><small>REDMI · POCO · 14T</small><h3>Xiaomi</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-chair" href="#pcs" data-filter-link="razer"><span class="category-number">08</span><div><small>PERFORMANCE RGB</small><h3>Razer</h3></div><span class="category-arrow">↗</span></a><a class="category-card category-gpu" href="#pcs" data-filter-link="chair"><span class="category-number">09</span><div><small>CONFORTO PARA JOGAR</small><h3>Cadeira Gamer</h3></div><span class="category-arrow">↗</span></a></div></section>
+
+      <section class="product-section" id="pcs"><div class="container"><div class="section-heading"><div><p class="kicker">Seleção LevelUp</p><h2>Escolha seu <em>próximo item.</em></h2></div><div class="filter-tabs" role="tablist"><button class="active" data-filter="all">Todos</button><button data-filter="pc">PC Gamer</button><button data-filter="apple">Apple</button><button data-filter="samsung">Samsung</button><button data-filter="xbox">Xbox</button><button data-filter="playstation">PlayStation</button><button data-filter="jbl">JBL</button><button data-filter="xiaomi">Xiaomi</button><button data-filter="razer">Razer</button><button data-filter="chair">Cadeiras Gamer</button></div></div><div class="product-grid" id="productGrid"></div></div></section>
+
+      <section class="feature-band" id="hardware"><div class="container feature-grid"><div class="feature-copy"><p class="kicker">Não é só um computador</p><h2>Seu sonho gamer,<br /><em>montado de verdade.</em></h2><p>Componentes selecionados, montagem cuidadosa e testes de estresse antes de chegar até você. Você escolhe o jogo. A gente cuida do resto.</p><a class="button button-primary" href="#pcs">Conheça nossos PCs <span>↗</span></a></div><div class="feature-list"><div><strong>01</strong><span><b>Teste de verdade</b> Cada máquina passa por benchmarks antes do envio.</span></div><div><strong>02</strong><span><b>Montagem limpa</b> Organização interna e airflow pensados para durar.</span></div><div><strong>03</strong><span><b>Suporte humano</b> Especialistas de verdade para acompanhar seu setup.</span></div></div></div></section>
+
+      <section class="reviews container" id="perifericos"><div class="section-heading"><div><p class="kicker">Quem já subiu de nível</p><h2>Experiências que <em>falam.</em></h2></div><div class="review-score"><strong>4.9</strong><span>★★★★★<small>+2.400 avaliações</small></span></div></div><div class="review-grid"><article><div class="stars">★★★★★</div><p>“O PC chegou impecável, muito bem embalado e rodando tudo que eu queria. O suporte antes da compra fez toda a diferença.”</p><footer><span class="avatar">MC</span><span><b>Marina C.</b><small>Curitiba, PR</small></span></footer></article><article><div class="stars">★★★★★</div><p>“Foi minha primeira compra de PC montado e a experiência foi muito tranquila. A máquina superou minhas expectativas.”</p><footer><span class="avatar orange">RA</span><span><b>Rafael A.</b><small>São Paulo, SP</small></span></footer></article><article><div class="stars">★★★★★</div><p>“Entrega rápida, montagem perfeita e atendimento que realmente entende de hardware. Já estou planejando o próximo upgrade.”</p><footer><span class="avatar blue">JS</span><span><b>João S.</b><small>Florianópolis, SC</small></span></footer></article></div></section>
+
+      <section class="guides" id="guias"><div class="container"><div class="section-heading"><div><p class="kicker">Conteúdo para jogar melhor</p><h2>Guias para o <em>próximo nível.</em></h2></div><a class="text-link" href="#guias">Ver todos <span>→</span></a></div><div class="guide-grid"><article class="guide-main"><img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1200&q=85" alt="Computador gamer com iluminação" /><div><small>HARDWARE · 6 MIN DE LEITURA</small><h3>Como montar um setup que acompanha sua evolução</h3><a href="#guideReader" data-guide="setup">Ler artigo →</a></div></article><article class="guide-small"><img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=700&q=85" alt="Teclado mecânico gamer" /><div><small>PERIFÉRICOS</small><h3>O teclado certo muda seu jogo?</h3><a href="#guideReader" data-guide="keyboard">Ler artigo →</a></div></article><article class="guide-small"><img src="https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?auto=format&fit=crop&w=700&q=85" alt="Setup com monitor ultrawide" /><div><small>SETUP</small><h3>Guia rápido para escolher seu monitor</h3><a href="#guideReader" data-guide="monitor">Ler artigo →</a></div></article></div></div></section>
+    </main>
+
+    <footer class="site-footer"><div class="container footer-top"><div><a class="brand" href="#top"><span class="brand-name"><strong>LevelUp</strong> <b>Store</b></span></a><p class="footer-note">Tecnologia para quem joga sério.</p></div><div><h4>Comprar</h4><a href="#pcs" data-footer-filter="pc">PCs Completos</a><a href="#hardware">Placas e monitores</a><a href="#perifericos">Gamer e áudio</a><a href="#pcs" data-footer-filter="mobile">Celulares</a></div><div><h4>Marcas</h4><a href="#pcs" data-footer-filter="apple">Apple</a><a href="#pcs" data-footer-filter="samsung">Samsung</a><a href="#pcs" data-footer-filter="xiaomi">Xiaomi</a><a href="#pcs" data-footer-filter="jbl">JBL · PlayStation · Xbox</a></div><div><h4>Receba novidades</h4><p class="newsletter-copy">Ofertas, lançamentos e conteúdo direto no seu e-mail.</p><form class="newsletter" id="newsletterForm"><input type="email" placeholder="seu@email.com" aria-label="Seu e-mail" required /><button aria-label="Cadastrar e-mail">→</button></form><span id="newsletterMessage" class="newsletter-message"></span><div class="socials"><a href="#top">ig</a><a href="#top">yt</a><a href="#top">tk</a><a href="#top">wa</a></div></div></div><div class="container footer-bottom"><span>© 2026 LevelUpStore. Todos os direitos reservados.</span><span>Feito para subir de nível.</span><a class="admin-shortcut" href="admin.html" title="Painel administrativo" aria-label="Abrir painel administrativo">⚙</a></div></footer>
+    <div class="guide-reader" id="guideReader" aria-hidden="true"><div class="guide-reader-backdrop" data-close-guide></div><article><button class="guide-reader-close" data-close-guide aria-label="Fechar guia">×</button><p class="kicker">LevelUp Guide</p><h2 id="guideTitle"></h2><div id="guideContent"></div></article></div><div class="cart-drawer" id="cartDrawer" aria-hidden="true"><div class="drawer-backdrop" data-close-cart></div><aside><button class="drawer-close" data-close-cart>×</button><p class="kicker">Seu setup</p><h2>Carrinho <span id="drawerCount">(0)</span></h2><div id="cartItems" class="cart-items"><p class="empty-cart">Seu carrinho está vazio.</p></div><div class="cart-total"><span>Total</span><strong id="cartTotal">R$ 0,00</strong></div><button class="button button-primary full-width" id="checkoutButton">Ir para o checkout <span>→</span></button></aside></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
