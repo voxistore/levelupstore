@@ -1,84 +1,129 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LevelUpStore | Painel administrativo</title>
-    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="admin.css" />
-    <style>
-      .category-filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 17px}.category-filters button{border:1px solid var(--line);background:transparent;color:var(--muted);padding:7px 9px;font-size:10px;font-weight:800}.category-filters button:hover,.category-filters button.active{background:var(--orange);border-color:var(--orange);color:#16100c}.product-list{max-height:505px}.category-media-panel{margin-top:18px;background:var(--panel);border:1px solid var(--line);padding:32px}.category-media-heading h2{font-family:'Barlow Condensed';font-size:42px;line-height:.9;margin:0;text-transform:uppercase}.category-media-heading h2 em{color:var(--orange);font-style:normal}.category-media-heading p:not(.eyebrow){color:var(--muted);font-size:12px}.category-media-list{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:25px}.category-media-card{display:grid;grid-template-columns:100px 1fr;gap:14px;padding:10px;border:1px solid var(--line);background:var(--panel-light)}.category-media-card img{width:100px;height:78px;object-fit:cover}.category-media-card strong{display:block;font-size:12px;margin:3px 0 8px}.category-media-card input[type=url]{width:100%;background:#0b141e;border:1px solid var(--line);color:#fff;padding:7px;font-size:10px;outline:0}.category-media-card input[type=file]{width:100%;color:var(--muted);font-size:9px}.category-media-card button{margin-top:7px;background:var(--orange);border:0;color:#17100d;padding:7px 9px;font-size:9px;font-weight:800;text-transform:uppercase}.category-media-card small{display:block;color:#70dd95;font-size:9px;margin-top:5px}.editor-actions{display:flex;gap:10px}@media(max-width:950px){.product-list{max-height:230px}.category-media-list{grid-template-columns:1fr 1fr}}@media(max-width:620px){.category-media-panel{padding:20px 15px}.category-media-list{grid-template-columns:1fr}.category-media-card{grid-template-columns:90px 1fr}.category-media-card img{width:90px;height:70px}.editor-actions{flex-direction:column}}
-    </style>
-  </head>
-  <body>
-    <div id="loginView" class="login-view">
-      <div class="login-art"><span class="art-mark">LU</span><p>LEVELUP<br /><b>CONTROL</b></p><span class="art-line"></span></div>
-      <form id="loginForm" class="login-card">
-        <p class="eyebrow">Área restrita</p><h1>Painel <em>admin.</em></h1><p class="login-copy">Gerencie produtos, preços e conteúdo da sua loja em um só lugar.</p>
-        <label>Usuário<input id="loginUser" autocomplete="username" required placeholder="Digite seu usuário" /></label>
-        <label>Senha<input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Digite sua senha" /></label>
-        <p id="loginError" class="login-error" role="alert"></p><button class="primary-button" type="submit">Entrar no painel <span>→</span></button>
-        <small class="login-hint">Acesso: <b>levelupstoreadmin</b> / <b>@levelupstoreadmin123</b></small>
-      </form>
-    </div>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LevelUpStore | Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#0a1018;--panel:#151f2b;--line:#263442;--ink:#f8fafc;--orange:#ff6b35}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:sans-serif}.login-box{max-width:320px;margin:10vh auto;padding:30px;background:var(--panel);border:1px solid var(--line)}input,button{width:100%;padding:10px;margin-top:10px;border:1px solid var(--line);background:#0b141e;color:#fff}button{background:var(--orange);border:0;font-weight:bold;cursor:pointer}.hidden{display:none}.main-layout{display:flex;height:100vh}.sidebar{width:300px;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto}.editor{flex:1;padding:40px}.product-item{padding:10px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between}.product-item:hover,.product-item.active{background:#1c2938}.form-group{margin-bottom:15px}label{display:block;margin-bottom:5px;font-size:12px;color:#8c9aa8}img.preview{max-width:200px;height:150px;object-fit:cover;background:#22303b}
+</style>
+</head>
+<body>
 
-    <div id="adminView" class="admin-view hidden">
-      <header class="admin-header"><a class="admin-brand" href="index.html"><span>LevelUp <b>Store</b></span><small>CONTROL CENTER</small></a><div class="admin-user"><span class="status-dot"></span><span>Administrador</span><button id="logoutButton">Sair</button></div></header>
-      <main class="admin-main">
-        <div class="admin-heading"><div><p class="eyebrow">Centro de controle</p><h1>Produtos <em>da loja.</em></h1><p>Edite o catálogo publicado sem sair do painel.</p></div><a class="outline-button" href="index.html" target="_blank">Ver loja <span>↗</span></a></div>
-        <div class="admin-layout">
-          <aside class="product-sidebar"><div class="sidebar-top"><strong id="productTotal">0 produtos</strong><span>Catálogo</span></div><label class="admin-search"><span>⌕</span><input id="productSearch" type="search" placeholder="Buscar produto..." /></label><div id="categoryFilters" class="category-filters"><button class="active" data-admin-filter="all">Todos</button><button data-admin-filter="pc">PC Gamer</button><button data-admin-filter="apple">Apple</button><button data-admin-filter="samsung">Samsung</button><button data-admin-filter="xbox">Xbox</button><button data-admin-filter="playstation">PlayStation</button><button data-admin-filter="jbl">JBL</button><button data-admin-filter="xiaomi">Xiaomi</button><button data-admin-filter="razer">Razer</button><button data-admin-filter="chair">Cadeiras</button></div><div id="productList" class="product-list"></div></aside>
-          <section class="editor-panel">
-            <div id="emptyEditor" class="empty-editor"><span>✦</span><h2>Selecione um produto</h2><p>Escolha um item na lista para editar suas informações.</p></div>
-            <form id="productForm" class="product-form hidden">
-              <div class="editor-title">
-                <div>
-                  <p class="eyebrow">Editando produto <span id="editingId"></span></p>
-                  <h2 id="editingName">Produto</h2>
-                </div>
-                <div class="editor-actions">
-                  <button type="button" id="resetProduct" class="danger-button">Restaurar original</button>
-                  <button type="button" id="deleteProduct" class="danger-button">Excluir produto</button>
-                </div>
-              </div>
-              <div class="editor-grid">
-                <div class="image-editor">
-                  <img id="imagePreview" src="" alt="Prévia do produto" />
-                  <label class="upload-label" for="productImageFile">Enviar foto do computador<input id="productImageFile" type="file" accept="image/png,image/jpeg,image/webp" /></label>
-                  <label class="upload-label" for="productImage">URL ou Dados da imagem<input id="productImage" type="text" placeholder="https://... ou escolha um arquivo acima" /></label>
-                  <p>Escolha um arquivo do computador ou informe uma URL pública.</p>
-                </div>
-                <div class="fields">
-                  <label>Nome do produto<input id="productName" required /></label>
-                  <div class="two-fields">
-                    <label>Categoria<select id="productCategory"><option value="pc">PC Gamer</option><option value="apple">Apple</option><option value="samsung">Samsung</option><option value="xbox">Xbox</option><option value="playstation">PlayStation</option><option value="jbl">JBL</option><option value="xiaomi">Xiaomi</option><option value="razer">Razer</option><option value="chair">Cadeira Gamer</option></select></label>
-                    <label>Etiqueta<input id="productBadge" required /></label>
-                  </div>
-                  <label>Especificações<input id="productDetail" required /></label>
-                  <label>Descrição<textarea id="productDescription" rows="5" required></textarea></label>
-                  <label>Preço <span class="field-hint">em reais</span><input id="productPrice" type="number" min="0" step="0.01" required /></label>
-                </div>
-              </div>
-              <div class="form-actions"><span id="saveMessage" class="save-message"></span><button class="primary-button" type="submit">Salvar alterações <span>✓</span></button></div>
-            </form>
-          </section>
-        </div>
-        <section class="category-media-panel">
-          <div class="category-media-heading">
-            <div>
-              <p class="eyebrow">Visual da home</p>
-              <h2>Fotos das <em>categorias.</em></h2>
-              <p>Troque a imagem de cada card exibido na página inicial ou remova para voltar à padrão.</p>
-            </div>
-          </div>
-          <div id="categoryMediaList" class="category-media-list"></div>
-        </section>
-      </main>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js?v=3"></script><script src="admin.js?v=3"></script>
-  </body>
+<!-- TELA DE LOGIN -->
+<div id="loginScreen" class="login-box">
+<h2>Painel Admin</h2>
+<input type="text" id="user" placeholder="Usuário" value="levelupstoreadmin">
+<input type="password" id="pass" placeholder="Senha" value="@levelupstoreadmin123">
+<button onclick="doLogin()">ENTRAR</button>
+<p id="error" style="color:red;font-size:12px"></p>
+</div>
+
+<!-- PAINEL PRINCIPAL -->
+<div id="adminPanel" class="main-layout hidden">
+<div class="sidebar">
+<div style="padding:20px;border-bottom:1px solid var(--line)">
+<strong>Produtos</strong>
+<input type="text" id="search" placeholder="Buscar..." oninput="renderList()">
+</div>
+<div id="list"></div>
+</div>
+<div class="editor">
+<div id="emptyState" style="text-align:center;margin-top:20vh;color:#555">Selecione um produto para editar</div>
+<form id="editForm" class="hidden" onsubmit="saveProduct(event)">
+<img id="preview" class="preview" src="">
+<div class="form-group"><label>ID</label><input id="p_id" readonly></div>
+<div class="form-group"><label>Nome</label><input id="p_name" required></div>
+<div class="form-group"><label>Preço</label><input id="p_price" type="number" step="0.01" required></div>
+<div class="form-group"><label>URL da Imagem</label><input id="p_image" required onchange="document.getElementById('preview').src=this.value"></div>
+<div class="form-group"><label>Descrição</label><textarea id="p_desc" rows="3" style="width:100%;background:#0b141e;color:#fff;border:1px solid var(--line)"></textarea></div>
+<button type="submit">SALVAR ALTERAÇÕES</button>
+<button type="button" onclick="deleteProduct()" style="background:#c0392b;margin-top:10px">EXCLUIR PRODUTO</button>
+</form>
+</div>
+</div>
+
+<script>
+// CONFIGURAÇÃO SUPABASE
+const SUPABASE_URL = 'https://tylrkakismpicnpzjiks.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_EYEc-ZTzObs27HrBJ_kdFg_xhEY9bHc';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allProducts = [];
+let currentId = null;
+
+// LOGIN SIMPLES
+function doLogin() {
+const u = document.getElementById('user').value;
+const p = document.getElementById('pass').value;
+if(u === 'levelupstoreadmin' && p === '@levelupstoreadmin123') {
+document.getElementById('loginScreen').classList.add('hidden');
+document.getElementById('adminPanel').classList.remove('hidden');
+loadProducts();
+} else {
+document.getElementById('error').innerText = 'Dados incorretos';
+}
+}
+
+// CARREGAR DADOS
+async function loadProducts() {
+// Tenta pegar do Supabase, se falhar usa lista vazia
+const { data } = await supabase.from('products_edits').select('*');
+if(data) allProducts = data;
+renderList();
+}
+
+// LISTAR PRODUTOS
+function renderList() {
+const term = document.getElementById('search').value.toLowerCase();
+const list = document.getElementById('list');
+list.innerHTML = allProducts
+.filter(p => p.name.toLowerCase().includes(term))
+.map(p => `<div class="product-item ${currentId===p.id?'active':''}" onclick="selectProduct(${p.id})">
+<span>${p.name}</span><small>R$ ${Number(p.price).toFixed(2)}</small></div>`).join('');
+}
+
+// SELECIONAR PARA EDITAR
+function selectProduct(id) {
+currentId = id;
+const p = allProducts.find(x => x.id === id);
+if(!p) return;
+document.getElementById('emptyState').classList.add('hidden');
+document.getElementById('editForm').classList.remove('hidden');
+document.getElementById('p_id').value = p.id;
+document.getElementById('p_name').value = p.name;
+document.getElementById('p_price').value = p.price;
+document.getElementById('p_image').value = p.image || '';
+document.getElementById('p_desc').value = p.description || '';
+document.getElementById('preview').src = p.image || '';
+renderList();
+}
+
+// SALVAR NO BANCO
+async function saveProduct(e) {
+e.preventDefault();
+const updates = {
+id: Number(document.getElementById('p_id').value),
+name: document.getElementById('p_name').value,
+price: Number(document.getElementById('p_price').value),
+image: document.getElementById('p_image').value,
+description: document.getElementById('p_desc').value
+};
+await supabase.from('products_edits').upsert(updates);
+alert('Salvo com sucesso!');
+loadProducts(); // Recarrega a lista
+}
+
+// EXCLUIR
+async function deleteProduct() {
+if(!confirm('Tem certeza?')) return;
+await supabase.from('products_edits').delete().eq('id', currentId);
+currentId = null;
+document.getElementById('editForm').classList.add('hidden');
+document.getElementById('emptyState').classList.remove('hidden');
+loadProducts();
+}
+</script>
+</body>
 </html>
