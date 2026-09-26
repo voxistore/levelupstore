@@ -133,12 +133,19 @@ function renderProducts(filter = 'all', query = '') {
 }
 
 function applyCategoryImages(images = {}) {
-  const localSaved = JSON.parse(localStorage.getItem('levelup-category-images') || '{}');
-  const merged = { ...localSaved, ...images };
-  document.querySelectorAll('[data-filter-link]').forEach(card => {
-    const img = merged[card.dataset.filterLink];
-    if (img) card.style.backgroundImage = `url("${img}")`;
-  });
+  try {
+    const localSaved = JSON.parse(localStorage.getItem('levelup-category-images') || '{}');
+    const merged = { ...localSaved, ...images };
+    document.querySelectorAll('[data-filter-link]').forEach(card => {
+      const key = card.dataset.filterLink;
+      const img = merged[key];
+      if (img && img.trim() !== '') {
+        card.style.setProperty('background-image', `url("${img.trim()}")`, 'important');
+      }
+    });
+  } catch (err) {
+    console.warn('Erro ao aplicar imagens das categorias:', err);
+  }
 }
 
 function renderCart() {
@@ -316,4 +323,9 @@ document.querySelectorAll('[data-close-guide]').forEach(button => button.addEven
   document.querySelector('#guideReader').setAttribute('aria-hidden', 'true');
 }));
 
+document.addEventListener('DOMContentLoaded', () => {
+  applyCategoryImages();
+});
+
 initStore();
+
