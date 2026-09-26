@@ -1,4 +1,31 @@
-<!DOCTYPE html>
+const fs = require('fs');
+
+// Ler a lista de produtos do script.js
+const script = fs.readFileSync('script.js', 'utf8');
+const match = script.match(/const initialProducts = (\[[\s\S]*?\]);/);
+
+if (!match) {
+    console.error("Não foi possível encontrar initialProducts no script.js");
+    process.exit(1);
+}
+
+// Avaliar o array de produtos de forma segura
+const produtosRaw = eval(match[1]);
+
+// Mapeia para a estrutura simples usada no admin
+const produtosFormatados = produtosRaw.map(p => ({
+    id: p.id,
+    nome: p.name,
+    preco: p.price,
+    img: p.image,
+    desc: p.description,
+    badge: p.badge || '',
+    cat: p.category || ''
+}));
+
+const produtosJson = JSON.stringify(produtosFormatados, null, 4);
+
+const adminHtml = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -86,7 +113,7 @@ img.preview { max-width: 200px; height: 140px; object-fit: cover; background: #2
 </div>
 
 <script>
-const PRODUTOS = ${produtosJson};
+const PRODUTOS = \${produtosJson};
 let produtosFiltrados = [...PRODUTOS];
 let atual = null;
 
@@ -110,13 +137,13 @@ function carregarLista() {
     document.getElementById('contador').innerText = 'Produtos (' + produtosFiltrados.length + ')';
     const lista = document.getElementById('lista');
     lista.innerHTML = produtosFiltrados.map(p =>
-        `<div class="item ${atual && atual.id === p.id ? 'active' : ''}" onclick="selecionar(${p.id})">
+        \`<div class="item \${atual && atual.id === p.id ? 'active' : ''}" onclick="selecionar(\${p.id})">
             <div>
-                <div><strong>${p.nome}</strong></div>
-                <div style="font-size: 11px; color: #8c9aa8;">${p.badge || p.cat}</div>
+                <div><strong>\${p.nome}</strong></div>
+                <div style="font-size: 11px; color: #8c9aa8;">\${p.badge || p.cat}</div>
             </div>
-            <small>R$ ${Number(p.preco).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</small>
-        </div>`
+            <small>R$ \${Number(p.preco).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</small>
+        </div>\`
     ).join('');
 }
 
@@ -171,7 +198,10 @@ function excluir() {
         filtrarLista();
     }
 }
-</script>
+<\/script>
 
 </body>
-</html>
+</html>`;
+
+fs.writeFileSync('admin.html', adminHtml, 'utf8');
+console.log('admin.html gerado com sucesso com todos os ' + produtosFormatados.length + ' produtos!');
