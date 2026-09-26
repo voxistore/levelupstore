@@ -1,183 +1,170 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<Anthropic charset="UTF-8" />
-<Anthropic name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LevelUpStore | Admin</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-  :root{--bg:#0a1018;--panel:#151f2b;--line:#263442;--ink:#f8fafc;--orange:#ff6b35}
-  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:sans-serif}
-  .login-box{max-width:340px;margin:10vh auto;padding:30px;background:var(--panel);border:1px solid var(--line);text-align:center;border-radius:8px}
-  input,select,textarea{width:100%;padding:10px;margin-top:6px;border:1px solid var(--line);background:#0b141e;color:#fff;font-size:14px;border-radius:4px}
-  button{width:100%;padding:12px;margin-top:15px;background:var(--orange);border:none;color:#111;font-weight:bold;font-size:14px;cursor:pointer;border-radius:4px;transition:0.2s}
-  button:hover{background:#ff8c5a}
-  .hidden{display:none!important}
-  .main-layout{display:flex;height:100vh}
-  .sidebar{width:320px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column}
-  .sidebar-header{padding:15px;border-bottom:1px solid var(--line)}
-  .product-list{flex:1;overflow-y:auto}
-  .product-item{padding:12px 15px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:13px}
-  .product-item:hover,.product-item.active{background:#1c2938}
-  .product-item small{color:var(--orange);font-weight:bold}
-  .editor{flex:1;padding:30px 40px;overflow-y:auto}
-  .tabs{display:flex;gap:10px;margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:10px}
-  .tab-btn{width:auto;padding:8px 16px;background:transparent;color:#8c9aa8;border:1px solid var(--line);margin:0}
-  .tab-btn.active{background:var(--orange);color:#111;border-color:var(--orange)}
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-  img.preview{max-width:200px;height:140px;object-fit:cover;background:#22303b;margin-bottom:15px;border-radius:4px;border:1px solid var(--line)}
-  label{display:block;margin-top:12px;color:#8c9aa8;font-size:11px;text-transform:uppercase;letter-spacing:1px}
-  .category-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px}
-  .category-card{background:#0b141e;border:1px solid var(--line);padding:15px;border-radius:6px}
-  .category-card img{width:100%;height:120px;object-fit:cover;border-radius:4px;margin-bottom:10px}
-</style>
+  <Anthropic charset="UTF-8" />
+  <Anthropic name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LevelUpStore | Admin</title>
+  <style>
+    :root {
+      --bg: #0a1018;
+      --panel: #151f2b;
+      --line: #263442;
+      --ink: #f8fafc;
+      --orange: #ff6b35;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .login-box { max-width: 340px; margin: 12vh auto; padding: 30px; background: var(--panel); border: 1px solid var(--line); text-align: center; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    input, select, textarea { width: 100%; padding: 10px; margin-top: 6px; border: 1px solid var(--line); background: #0b141e; color: #fff; font-size: 14px; border-radius: 4px; }
+    button { width: 100%; padding: 12px; margin-top: 15px; background: var(--orange); border: none; color: #111; font-weight: bold; font-size: 14px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+    button:hover { background: #ff8c5a; }
+    .hidden { display: none !important; }
+    .main-layout { display: flex; height: 100vh; }
+    .sidebar { width: 320px; background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+    .sidebar-header { padding: 15px; border-bottom: 1px solid var(--line); }
+    .product-list { flex: 1; overflow-y: auto; }
+    .product-item { padding: 12px 15px; border-bottom: 1px solid var(--line); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+    .product-item:hover, .product-item.active { background: #1c2938; }
+    .product-item small { color: var(--orange); font-weight: bold; }
+    .editor { flex: 1; padding: 30px 40px; overflow-y: auto; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+    .tab-btn { width: auto; padding: 8px 16px; background: transparent; color: #8c9aa8; border: 1px solid var(--line); margin: 0; }
+    .tab-btn.active { background: var(--orange); color: #111; border-color: var(--orange); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    img.preview { max-width: 200px; height: 140px; object-fit: cover; background: #22303b; margin-bottom: 15px; border-radius: 4px; border: 1px solid var(--line); }
+    label { display: block; margin-top: 12px; color: #8c9aa8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .category-card { background: #0b141e; border: 1px solid var(--line); padding: 15px; border-radius: 6px; }
+    .category-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; }
+  </style>
 </head>
 <body>
 
-<!-- TELA DE LOGIN -->
-<div id="loginScreen" class="login-box">
-  <h2 style="text-transform:uppercase;margin:0 0 5px;color:#fff">Painel Admin</h2>
-  <p style="color:#8c9aa8;font-size:12px;margin:0 0 20px">LevelUpStore Control</p>
-  <input type="text" id="user" value="levelupstoreadmin" placeholder="Usuário">
-  <input type="password" id="pass" value="@levelupstoreadmin123" placeholder="Senha">
-  <button type="button" id="btnEntrar">ENTRAR NO PAINEL</button>
-  <p id="error" style="color:#ff6b35;font-size:12px;margin-top:10px"></p>
-</div>
-
-<!-- PAINEL PRINCIPAL -->
-<div id="adminPanel" class="main-layout hidden">
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <strong id="prodCount">Produtos (0)</strong>
-        <a href="index.html" target="_blank" style="color:var(--orange);font-size:12px;text-decoration:none">Ver Loja ↗</a>
-      </div>
-      <input type="text" id="search" placeholder="Buscar por nome ou categoria..." oninput="renderList()">
-    </div>
-    <div id="list" class="product-list"></div>
+  <!-- TELA DE LOGIN -->
+  <div id="loginScreen" class="login-box">
+    <h2 style="text-transform:uppercase;margin:0 0 5px;color:#fff">Painel Admin</h2>
+    <p style="color:#8c9aa8;font-size:12px;margin:0 0 20px">LevelUpStore Control</p>
+    <input type="text" id="user" value="levelupstoreadmin" placeholder="Usuário">
+    <input type="password" id="pass" value="@levelupstoreadmin123" placeholder="Senha">
+    <button type="button" id="btnEntrar">ENTRAR NO PAINEL</button>
+    <p id="error" style="color:#ff6b35;font-size:12px;margin-top:10px"></p>
   </div>
 
-  <div class="editor">
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('products')">Gerenciar Produtos</button>
-      <button class="tab-btn" onclick="switchTab('categories')">Fotos das Categorias</button>
-    </div>
-
-    <!-- ABA PRODUTOS -->
-    <div id="tabProducts">
-      <div id="emptyState" style="text-align:center;margin-top:15vh;color:#555">
-        Selecione um produto na barra lateral para editar suas informações ou fotos.
+  <!-- PAINEL PRINCIPAL -->
+  <div id="adminPanel" class="main-layout hidden">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <strong id="prodCount">Produtos (0)</strong>
+          <a href="index.html" target="_blank" style="color:var(--orange);font-size:12px;text-decoration:none">Ver Loja ↗</a>
+        </div>
+        <input type="text" id="search" placeholder="Buscar produto ou marca..." oninput="renderList()">
       </div>
-      <form id="editForm" class="hidden" onsubmit="saveProduct(event)">
-        <img id="preview" class="preview" src="">
-
-        <div class="grid-2">
-          <div>
-            <label>ID do Produto</label>
-            <input id="p_id" readonly style="opacity:0.5">
-          </div>
-          <div>
-            <label>Categoria</label>
-            <select id="p_cat">
-              <option value="pc">PC Gamer</option>
-              <option value="hardware">Hardware / Monitores</option>
-              <option value="mobile">Celulares (Apple/Samsung/Xiaomi)</option>
-              <option value="audio">Áudio (JBL / AirPods)</option>
-              <option value="wearable">Wearables / Smartwatches</option>
-              <option value="gamer">Cadeiras & Periféricos</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <label>Nome do Produto</label>
-            <input id="p_name" required>
-          </div>
-          <div>
-            <label>Etiqueta / Badge</label>
-            <input id="p_badge" placeholder="Ex: Apple, Novo, Promoção">
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <label>Preço à vista (R$)</label>
-            <input id="p_price" type="number" step="0.01" required>
-          </div>
-          <div>
-            <label>Detalhes rápidos</label>
-            <input id="p_detail" placeholder="Ex: 256GB · 5G · AMOLED">
-          </div>
-        </div>
-
-        <label>URL da Imagem</label>
-        <input id="p_image" required oninput="document.getElementById('preview').src=this.value">
-
-        <label>Descrição Completa</label>
-        <textarea id="p_desc" rows="3"></textarea>
-
-        <button type="submit">SALVAR ALTERAÇÕES</button>
-        <button type="button" onclick="deleteProduct()" style="background:#c0392b;color:#fff;margin-top:10px">EXCLUIR ESTE PRODUTO</button>
-      </form>
+      <div id="list" class="product-list"></div>
     </div>
 
-    <!-- ABA CATEGORIAS -->
-    <div id="tabCategories" class="hidden">
-      <h3 style="margin-top:0">Personalizar Imagens das Categorias</h3>
-      <p style="color:#8c9aa8;font-size:13px;margin-bottom:20px">Altere as fotos exibidas nos cards da página inicial.</p>
-      <div id="categoryCards" class="category-grid"></div>
-    </div>
+    <div class="editor">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('products')">Gerenciar Produtos</button>
+        <button class="tab-btn" onclick="switchTab('categories')">Fotos das Categorias</button>
+      </div>
 
+      <!-- ABA PRODUTOS -->
+      <div id="tabProducts">
+        <div id="emptyState" style="text-align:center;margin-top:15vh;color:#555">
+          Selecione um produto na barra lateral para editar suas informações ou fotos.
+        </div>
+        <form id="editForm" class="hidden" onsubmit="saveProduct(event)">
+          <img id="preview" class="preview" src="">
+
+          <div class="grid-2">
+            <div>
+              <label>ID do Produto</label>
+              <input id="p_id" readonly style="opacity:0.5">
+            </div>
+            <div>
+              <label>Categoria</label>
+              <select id="p_cat">
+                <option value="pc">PC Gamer</option>
+                <option value="hardware">Hardware / Monitores</option>
+                <option value="mobile">Celulares (Apple/Samsung/Xiaomi)</option>
+                <option value="audio">Áudio (JBL / AirPods)</option>
+                <option value="wearable">Wearables / Smartwatches</option>
+                <option value="gamer">Cadeiras & Periféricos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label>Nome do Produto</label>
+              <input id="p_name" required>
+            </div>
+            <div>
+              <label>Etiqueta / Badge</label>
+              <input id="p_badge" placeholder="Ex: Apple, Novo, Promoção">
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label>Preço à vista (R$)</label>
+              <input id="p_price" type="number" step="0.01" required>
+            </div>
+            <div>
+              <label>Detalhes rápidos</label>
+              <input id="p_detail" placeholder="Ex: 256GB · 5G · AMOLED">
+            </div>
+          </div>
+
+          <label>URL da Imagem</label>
+          <input id="p_image" required oninput="document.getElementById('preview').src=this.value">
+
+          <label>Descrição Completa</label>
+          <textarea id="p_desc" rows="3"></textarea>
+
+          <button type="submit">SALVAR ALTERAÇÕES</button>
+          <button type="button" onclick="deleteProduct()" style="background:#c0392b;color:#fff;margin-top:10px">EXCLUIR ESTE PRODUTO</button>
+        </form>
+      </div>
+
+      <!-- ABA CATEGORIAS -->
+      <div id="tabCategories" class="hidden">
+        <h3 style="margin-top:0">Personalizar Imagens das Categorias</h3>
+        <p style="color:#8c9aa8;font-size:13px;margin-bottom:20px">Altere as fotos exibidas nos cards da página inicial.</p>
+        <div id="categoryCards" class="category-grid"></div>
+      </div>
+
+    </div>
   </div>
-</div>
 
-<script>
-// CONFIGURAÇÃO SUPABASE
-const SUPABASE_URL = 'https://tylrkakismpicnpzjiks.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_EYEc-ZTzObs27HrBJ_kdFg_xhEY9bHc';
-let supabase = null;
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://tylrkakismpicnpzjiks.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_EYEc-ZTzObs27HrBJ_kdFg_xhEY9bHc';
+    let supabase = null;
 
-try {
-  if (window.supabase) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  }
-} catch (e) {
-  console.warn('Supabase não conectado:', e);
-}
+    try {
+      if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (e) {
+      console.warn('Supabase não conectado:', e);
+    }
 
-// Lista completa de categorias para edição da foto de capa
-const CATEGORIES = [
-  { key: 'pc', name: 'PC Gamer', defaultImg: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=700&q=80' },
-  { key: 'apple', name: 'Apple (iPhone, Mac)', defaultImg: 'https://images.unsplash.com/photo-1592286927505-2fd0c7f2f2f9?auto=format&fit=crop&w=700&q=80' },
-  { key: 'samsung', name: 'Samsung (Galaxy)', defaultImg: 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=700&q=80' },
-  { key: 'xbox', name: 'Xbox Consoles', defaultImg: 'https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=700&q=80' },
-  { key: 'playstation', name: 'PlayStation', defaultImg: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=700&q=80' },
-  { key: 'jbl', name: 'JBL Áudio', defaultImg: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=700&q=80' },
-  { key: 'xiaomi', name: 'Xiaomi / Poco', defaultImg: 'https://images.unsplash.com/photo-1529612700005-e35377bf1415?auto=format&fit=crop&w=700&q=80' },
-  { key: 'razer', name: 'Razer Periféricos', defaultImg: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=700&q=80' },
-  { key: 'chair', name: 'Cadeiras Gamer', defaultImg: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?auto=format&fit=crop&w=700&q=80' }
-];
+    const CATEGORIES = [
+      { key: 'pc', name: 'PC Gamer', defaultImg: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=700&q=80' },
+      { key: 'apple', name: 'Apple (iPhone, Mac)', defaultImg: 'https://images.unsplash.com/photo-1592286927505-2fd0c7f2f2f9?auto=format&fit=crop&w=700&q=80' },
+      { key: 'samsung', name: 'Samsung (Galaxy)', defaultImg: 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=700&q=80' },
+      { key: 'xbox', name: 'Xbox Consoles', defaultImg: 'https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=700&q=80' },
+      { key: 'playstation', name: 'PlayStation', defaultImg: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=700&q=80' },
+      { key: 'jbl', name: 'JBL Áudio', defaultImg: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=700&q=80' },
+      { key: 'xiaomi', name: 'Xiaomi / Poco', defaultImg: 'https://images.unsplash.com/photo-1529612700005-e35377bf1415?auto=format&fit=crop&w=700&q=80' },
+      { key: 'razer', name: 'Razer Periféricos', defaultImg: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=700&q=80' },
+      { key: 'chair', name: 'Cadeiras Gamer', defaultImg: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?auto=format&fit=crop&w=700&q=80' }
+    ];
 
-let allProducts = [];
-let currentId = null;
-
-// FUNÇÃO DE LOGIN (AGORA TOTALMENTE INDEPENDENTE)
-function doLogin() {
-  const u = document.getElementById('user').value.trim();
-  const p = document.getElementById('pass').value.trim();
-  const err = document.getElementById('error');
-
-  if (u === 'levelupstoreadmin' && p === '@levelupstoreadmin123') {
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('adminPanel').classList.remove('hidden');
-    initAdmin();
-  } else {
-    err.innerText = 'Usuário ou senha incorretos.';
-  }
-}
-
-const BASE_PRODUCTS = [
+    const BASE_PRODUCTS = [
   { id: 1, category: 'pc', badge: 'Mais vendido', name: 'PC Completo LevelUp Start', detail: 'Ryzen 5 5600G · 16GB · SSD 480GB', description: 'Kit pronto para jogar em Full HD com monitor, teclado e mouse.', price: 2899, image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=700&q=80' },
   { id: 2, category: 'pc', badge: 'Equilíbrio perfeito', name: 'PC Completo LevelUp RTX', detail: 'Ryzen 5 5600 · RTX 4060 · 16GB · SSD 1TB', description: 'Desempenho forte para jogos competitivos e criação de conteúdo.', price: 5499, image: 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=700&q=80' },
   { id: 3, category: 'pc', badge: 'Novo', name: 'PC Completo LevelUp Creator', detail: 'Ryzen 7 7700 · RTX 4070 · 32GB · SSD 1TB', description: 'Potência para jogar, editar e fazer streaming sem travar.', price: 8299, image: 'https://images.unsplash.com/photo-1593640495253-23196b27a87f?auto=format&fit=crop&w=700&q=80' },
@@ -255,157 +242,174 @@ const BASE_PRODUCTS = [
   { id: 59, category: 'gamer', badge: 'Razer', name: 'Razer Seiren V3 Mini', detail: 'Razer · USB · Microfone condensador · Supercardioide', description: 'Microfone compacto para lives, chamadas e criação de conteúdo.', price: 399, image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=700&q=80' },
   { id: 60, category: 'gamer', badge: 'Razer', name: 'Razer Wolverine V2 Chroma', detail: 'Razer · Xbox · Botões programáveis · RGB', description: 'Controle com resposta rápida e comandos extras para Xbox e PC.', price: 999, image: 'https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=700&q=80' }
 ];
+    let allProducts = [];
+    let currentId = null;
 
-async function initAdmin() {
-  // Inicializa com a lista de 76 produtos embutida
-  allProducts = [...BASE_PRODUCTS];
-
-  // Tenta puxar alterações salvas no Supabase
-  if (supabase) {
-    try {
-      const { data } = await supabase.from('products_edits').select('*');
-      if (data && data.length > 0) {
-        data.forEach(edit => {
-          if (edit.deleted) {
-            allProducts = allProducts.filter(p => p.id !== edit.id);
-          } else {
-            const index = allProducts.findIndex(p => p.id === edit.id);
-            if (index !== -1) Object.assign(allProducts[index], edit);
-            else allProducts.push(edit);
-          }
-        });
+    function doLogin() {
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value.trim();
+      if (u === 'levelupstoreadmin' && p === '@levelupstoreadmin123') {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        initAdmin();
+      } else {
+        document.getElementById('error').innerText = 'Usuário ou senha incorretos.';
       }
-    } catch (e) {
-      console.warn('Erro ao carregar edições do Supabase:', e);
     }
-  }
 
-  renderList();
-  renderCategoryGrid();
-}
+    document.getElementById('btnEntrar').addEventListener('click', doLogin);
+    document.getElementById('pass').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') doLogin();
+    });
 
-function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  if (tab === 'products') {
-    document.querySelectorAll('.tab-btn')[0].classList.add('active');
-    document.getElementById('tabProducts').classList.remove('hidden');
-    document.getElementById('tabCategories').classList.add('hidden');
-  } else {
-    document.querySelectorAll('.tab-btn')[1].classList.add('active');
-    document.getElementById('tabProducts').classList.add('hidden');
-    document.getElementById('tabCategories').classList.remove('hidden');
-  }
-}
+    async function initAdmin() {
+      allProducts = [...BASE_PRODUCTS];
 
-function renderList() {
-  const term = document.getElementById('search').value.toLowerCase();
-  const list = document.getElementById('list');
-  const filtered = allProducts.filter(p =>
-    p.name.toLowerCase().includes(term) ||
-    (p.badge && p.badge.toLowerCase().includes(term)) ||
-    (p.category && p.category.toLowerCase().includes(term))
-  );
+      if (supabase) {
+        try {
+          const { data } = await supabase.from('products_edits').select('*');
+          if (data && data.length > 0) {
+            data.forEach(edit => {
+              if (edit.deleted) {
+                allProducts = allProducts.filter(p => p.id !== edit.id);
+              } else {
+                const index = allProducts.findIndex(p => p.id === edit.id);
+                if (index !== -1) Object.assign(allProducts[index], edit);
+                else allProducts.push(edit);
+              }
+            });
+          }
+        } catch (e) {
+          console.warn('Erro ao carregar do Supabase:', e);
+        }
+      }
 
-  document.getElementById('prodCount').innerText = `Produtos (${filtered.length})`;
-  list.innerHTML = filtered.map(p => `
-    <div class="product-item ${currentId === p.id ? 'active' : ''}" onclick="selectProduct(${p.id})">
-      <div>
-        <div><strong>${p.name}</strong></div>
-        <div style="font-size:11px;color:#8c9aa8">${p.badge || p.category}</div>
-      </div>
-      <small>R$ ${Number(p.price || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</small>
-    </div>
-  `).join('');
-}
+      renderList();
+      renderCategoryGrid();
+    }
 
-function selectProduct(id) {
-  currentId = id;
-  const p = allProducts.find(x => x.id === id);
-  if (!p) return;
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (tab === 'products') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('tabProducts').classList.remove('hidden');
+        document.getElementById('tabCategories').classList.add('hidden');
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('tabProducts').classList.add('hidden');
+        document.getElementById('tabCategories').classList.remove('hidden');
+      }
+    }
 
-  document.getElementById('emptyState').classList.add('hidden');
-  document.getElementById('editForm').classList.remove('hidden');
+    function renderList() {
+      const term = document.getElementById('search').value.toLowerCase();
+      const list = document.getElementById('list');
+      const filtered = allProducts.filter(p =>
+        p.name.toLowerCase().includes(term) ||
+        (p.badge && p.badge.toLowerCase().includes(term)) ||
+        (p.category && p.category.toLowerCase().includes(term))
+      );
 
-  document.getElementById('p_id').value = p.id;
-  document.getElementById('p_name').value = p.name || '';
-  document.getElementById('p_cat').value = p.category || 'pc';
-  document.getElementById('p_badge').value = p.badge || '';
-  document.getElementById('p_price').value = p.price || 0;
-  document.getElementById('p_detail').value = p.detail || '';
-  document.getElementById('p_image').value = p.image || '';
-  document.getElementById('p_desc').value = p.description || '';
-  document.getElementById('preview').src = p.image || '';
+      document.getElementById('prodCount').innerText = `Produtos (${filtered.length})`;
+      list.innerHTML = filtered.map(p => `
+        <div class="product-item ${currentId === p.id ? 'active' : ''}" onclick="selectProduct(${p.id})">
+          <div>
+            <div><strong>${p.name}</strong></div>
+            <div style="font-size:11px;color:#8c9aa8">${p.badge || p.category}</div>
+          </div>
+          <small>R$ ${Number(p.price || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</small>
+        </div>
+      `).join('');
+    }
 
-  renderList();
-}
+    function selectProduct(id) {
+      currentId = id;
+      const p = allProducts.find(x => x.id === id);
+      if (!p) return;
 
-async function saveProduct(e) {
-  e.preventDefault();
-  const id = Number(document.getElementById('p_id').value);
-  const updates = {
-    id: id,
-    name: document.getElementById('p_name').value,
-    category: document.getElementById('p_cat').value,
-    badge: document.getElementById('p_badge').value,
-    price: Number(document.getElementById('p_price').value),
-    detail: document.getElementById('p_detail').value,
-    image: document.getElementById('p_image').value,
-    description: document.getElementById('p_desc').value
-  };
+      document.getElementById('emptyState').classList.add('hidden');
+      document.getElementById('editForm').classList.remove('hidden');
 
-  const index = allProducts.findIndex(p => p.id === id);
-  if (index !== -1) {
-    Object.assign(allProducts[index], updates);
-  }
+      document.getElementById('p_id').value = p.id;
+      document.getElementById('p_name').value = p.name || '';
+      document.getElementById('p_cat').value = p.category || 'pc';
+      document.getElementById('p_badge').value = p.badge || '';
+      document.getElementById('p_price').value = p.price || 0;
+      document.getElementById('p_detail').value = p.detail || '';
+      document.getElementById('p_image').value = p.image || '';
+      document.getElementById('p_desc').value = p.description || '';
+      document.getElementById('preview').src = p.image || '';
 
-  if (supabase) {
-    await supabase.from('products_edits').upsert(updates);
-  }
+      renderList();
+    }
 
-  alert('Alterações salvas com sucesso!');
-  renderList();
-}
+    async function saveProduct(e) {
+      e.preventDefault();
+      const id = Number(document.getElementById('p_id').value);
+      const updates = {
+        id: id,
+        name: document.getElementById('p_name').value,
+        category: document.getElementById('p_cat').value,
+        badge: document.getElementById('p_badge').value,
+        price: Number(document.getElementById('p_price').value),
+        detail: document.getElementById('p_detail').value,
+        image: document.getElementById('p_image').value,
+        description: document.getElementById('p_desc').value
+      };
 
-async function deleteProduct() {
-  if (!confirm('Deseja realmente excluir este produto?')) return;
+      const index = allProducts.findIndex(p => p.id === id);
+      if (index !== -1) {
+        Object.assign(allProducts[index], updates);
+      }
 
-  if (supabase) {
-    await supabase.from('products_edits').upsert({ id: currentId, deleted: true });
-  }
+      if (supabase) {
+        await supabase.from('products_edits').upsert(updates);
+      }
 
-  allProducts = allProducts.filter(p => p.id !== currentId);
-  currentId = null;
-  document.getElementById('editForm').classList.add('hidden');
-  document.getElementById('emptyState').classList.remove('hidden');
-  renderList();
-  alert('Produto excluído com sucesso!');
-}
+      alert('Alterações salvas com sucesso!');
+      renderList();
+    }
 
-function renderCategoryGrid() {
-  const container = document.getElementById('categoryCards');
-  const savedImages = JSON.parse(localStorage.getItem('levelup-category-images') || '{}');
+    async function deleteProduct() {
+      if (!confirm('Deseja realmente excluir este produto?')) return;
 
-  container.innerHTML = CATEGORIES.map(cat => {
-    const currentImg = savedImages[cat.key] || cat.defaultImg;
-    return `
-      <div class="category-card">
-        <img id="cat_prev_${cat.key}" src="${currentImg}">
-        <strong>${cat.name}</strong>
-        <label>URL da Imagem</label>
-        <input id="cat_input_${cat.key}" value="${currentImg}" oninput="document.getElementById('cat_prev_${cat.key}').src=this.value">
-        <button type="button" onclick="saveCategoryImg('${cat.key}')">Salvar Foto de Capa</button>
-      </div>
-    `;
-  }).join('');
-}
+      if (supabase) {
+        await supabase.from('products_edits').upsert({ id: currentId, deleted: true });
+      }
 
-function saveCategoryImg(key) {
-  const url = document.getElementById(`cat_input_${key}`).value.trim();
-  const saved = JSON.parse(localStorage.getItem('levelup-category-images') || '{}');
-  saved[key] = url;
-  localStorage.setItem('levelup-category-images', JSON.stringify(saved));
-  alert('Foto da categoria atualizada!');
-}
-</script>
+      allProducts = allProducts.filter(p => p.id !== currentId);
+      currentId = null;
+      document.getElementById('editForm').classList.add('hidden');
+      document.getElementById('emptyState').classList.remove('hidden');
+      renderList();
+      alert('Produto excluído com sucesso!');
+    }
+
+    function renderCategoryGrid() {
+      const container = document.getElementById('categoryCards');
+      const savedImages = JSON.parse(localStorage.getItem('levelup-category-images') || '{}');
+
+      container.innerHTML = CATEGORIES.map(cat => {
+        const currentImg = savedImages[cat.key] || cat.defaultImg;
+        return `
+          <div class="category-card">
+            <img id="cat_prev_${cat.key}" src="${currentImg}">
+            <strong>${cat.name}</strong>
+            <label>URL da Imagem</label>
+            <input id="cat_input_${cat.key}" value="${currentImg}" oninput="document.getElementById('cat_prev_${cat.key}').src=this.value">
+            <button type="button" onclick="saveCategoryImg('${cat.key}')">Salvar Foto de Capa</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function saveCategoryImg(key) {
+      const url = document.getElementById(`cat_input_${key}`).value.trim();
+      const saved = JSON.parse(localStorage.getItem('levelup-category-images') || '{}');
+      saved[key] = url;
+      localStorage.setItem('levelup-category-images', JSON.stringify(saved));
+      alert('Foto da categoria atualizada com sucesso!');
+    }
+  </script>
 </body>
-</html><script>document.addEventListener("DOMContentLoaded", function() {  const btn = document.getElementById("btnEntrar");  if (btn) {    btn.addEventListener("click", doLogin);  }});</script>
+</html>
