@@ -40,7 +40,7 @@
   <p style="color:#8c9aa8;font-size:12px;margin:0 0 20px">LevelUpStore Control</p>
   <input type="text" id="user" value="levelupstoreadmin" placeholder="Usuário">
   <input type="password" id="pass" value="@levelupstoreadmin123" placeholder="Senha">
-  <button type="button" onclick="doLogin()">ENTRAR NO PAINEL</button>
+  <button type="button" id="btnEntrar">ENTRAR NO PAINEL</button>
   <p id="error" style="color:#ff6b35;font-size:12px;margin-top:10px"></p>
 </div>
 
@@ -408,4 +408,4 @@ function saveCategoryImg(key) {
 }
 </script>
 </body>
-</html>
+</html><script>document.addEventListener("DOMContentLoaded", function() {  const btn = document.getElementById("btnEntrar");  if (btn) {    btn.addEventListener("click", doLogin);  }});</script>
